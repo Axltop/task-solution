@@ -1,4 +1,4 @@
-import { clamp, getAverage, getLabel, getPercent, getTotal } from './rating';
+import { clamp, getAverage, getLabel, getPercent, getTotal, roundToOneDecimal } from './rating';
 
 const distribution = { 5: 952, 4: 171, 3: 55, 2: 14, 1: 40 };
 
@@ -6,12 +6,14 @@ describe('rating utils', () => {
   it('sums the review counts', () => {
     expect(getTotal(distribution)).toBe(1232);
     expect(getTotal({})).toBe(0);
+    expect(getTotal()).toBe(0);
   });
 
   it('computes a weighted average rounded to one decimal', () => {
     expect(getAverage(distribution)).toBe(4.6);
     expect(getAverage({ 5: 1, 4: 1 })).toBe(4.5);
     expect(getAverage({ 5: 0, 1: 0 })).toBe(0);
+    expect(getAverage()).toBe(0);
   });
 
   it.each([
@@ -24,6 +26,21 @@ describe('rating utils', () => {
     [0, 'Poor'],
   ])('labels %s as %s', (average, label) => {
     expect(getLabel(average)).toBe(label);
+  });
+
+  it('scales the label thresholds to the maximum rating', () => {
+    expect(getLabel(4.6, 10)).toBe('Fair');
+    expect(getLabel(9, 10)).toBe('Excellent');
+  });
+
+  it.each([NaN, -1])('falls back to the lowest label for %s instead of throwing', (average) => {
+    expect(getLabel(average)).toBe('Poor');
+  });
+
+  it('rounds to one decimal place', () => {
+    expect(roundToOneDecimal(4.567)).toBe(4.6);
+    expect(roundToOneDecimal(4.608)).toBe(4.6);
+    expect(roundToOneDecimal(3)).toBe(3);
   });
 
   it('computes a rounded percentage and guards against zero totals', () => {

@@ -3,19 +3,21 @@ import PropTypes from 'prop-types';
 import RatingSummary from '../RatingSummary';
 import ProviderBadge from '../ProviderBadge';
 import RatingBreakdown from '../RatingBreakdown';
-import { getAverage, getLabel } from '../../utils/rating';
+import { getAverage, getLabel, roundToOneDecimal } from '../../utils/rating';
 import { Card, Header } from './ProductRating.styles';
 
-const ProductRating = ({ distribution, average, maxRating = 5, caption, logoSrc }) => {
+// `distribution` is required (PropTypes warns), but an empty fallback renders an empty card instead of crashing.
+const ProductRating = ({ distribution = {}, average, maxRating = 5, caption, logoSrc }) => {
   const headingId = useId();
-  const score = average ?? getAverage(distribution);
+  // Round once here so the stars, their accessible name and the visible score all agree.
+  const score = roundToOneDecimal(average ?? getAverage(distribution));
 
   return (
     <Card aria-labelledby={headingId}>
       <Header>
         <RatingSummary
           headingId={headingId}
-          label={getLabel(score)}
+          label={getLabel(score, maxRating)}
           average={score}
           maxRating={maxRating}
         />

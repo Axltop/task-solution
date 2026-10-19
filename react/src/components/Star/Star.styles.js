@@ -25,4 +25,5 @@ export const Icon = styled(StarIcon)`
   margin: auto;
   width: 62%;
   height: 62%;
+  color: ${({ theme }) => theme.colors.surface};
 `;

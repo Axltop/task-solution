@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -142,7 +143,7 @@ class NormaliserTest {
             titles.add("Doctor");
 
             assertEquals(List.of("Nurse"), custom.getNormalisedTitles());
-            assertThrows(UnsupportedOperationException.class, () -> custom.getNormalisedTitles().add("Doctor"));
+            assertThrows(UnsupportedOperationException.class, () -> new ArrayList<>(custom.getNormalisedTitles()).add("Doctor"));
         }
     }
 

@@ -36,12 +36,16 @@ public final class App {
                 if (input.isEmpty()) {
                     continue;
                 }
-                System.out.println(normaliser.normalise(input));
+                System.out.println(describe(input, normaliser.findBestMatch(input)));
             }
         }
         System.out.println("Bye.");
     }
 
-
-
+    /** Formats one console line, e.g. {@code "Java engineer -> Software engineer (q = 0.50)"}. */
+    static String describe(String input, Optional<MatchResult> match) {
+        return match
+                .map(result -> String.format(Locale.ROOT, "%s -> %s (q = %.2f)", input, result.title(), result.score()))
+                .orElse(input + " -> no match");
+    }
 }

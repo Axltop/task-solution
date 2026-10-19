@@ -28,10 +28,35 @@ describe('ProductRating', () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it('warns when the required distribution prop is missing', () => {
+  it('computes 4.6 from the design counts, as the demo does', () => {
+    renderWithTheme(<ProductRating distribution={distribution} />);
+    expect(screen.getByRole('img', { name: 'Rated 4.6 out of 5 stars' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Excellent' })).toBeInTheDocument();
+  });
+
+  it('prefers an explicit average over the one computed from the distribution', () => {
+    renderWithTheme(<ProductRating distribution={{ 5: 1 }} average={3.2} />);
+    expect(screen.getByRole('img', { name: 'Rated 3.2 out of 5 stars' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Good' })).toBeInTheDocument();
+  });
+
+  it('rounds an explicit average to one decimal everywhere it is shown', () => {
+    renderWithTheme(<ProductRating distribution={distribution} average={4.567} />);
+    expect(screen.getByRole('img', { name: 'Rated 4.6 out of 5 stars' })).toBeInTheDocument();
+    expect(screen.getByText('4.6 out of 5')).toBeInTheDocument();
+  });
+
+  it('scales the label to maxRating', () => {
+    renderWithTheme(<ProductRating distribution={{ 10: 1 }} average={4.6} maxRating={10} />);
+    expect(screen.getByRole('heading', { name: 'Fair' })).toBeInTheDocument();
+  });
+
+  it('warns about a missing distribution but still renders an empty card', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => renderWithTheme(<ProductRating average={4} />)).toThrow();
+    renderWithTheme(<ProductRating />);
     expect(spy.mock.calls.flat().join(' ')).toMatch(/`distribution` is marked as required/);
     spy.mockRestore();
+    expect(screen.getByRole('heading', { name: 'Poor' })).toBeInTheDocument();
+    screen.getAllByRole('progressbar').forEach((bar) => expect(bar).toHaveAttribute('aria-valuenow', '0'));
   });
 });

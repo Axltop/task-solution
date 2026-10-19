@@ -3,7 +3,7 @@ import StarIcon from '../StarIcon';
 
 export const Row = styled.li`
   display: grid;
-  grid-template-columns: auto 1fr minmax(3ch, auto);
+  grid-template-columns: auto 1fr 4ch;
   align-items: center;
   gap: clamp(10px, 3.5vw, 18px);
   font-size: clamp(0.8rem, 3.2vw, 0.875rem);

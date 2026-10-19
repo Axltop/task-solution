@@ -5,7 +5,7 @@ import { Fill, Icon, Tile } from './Star.styles';
 const Star = ({ fill = 1 }) => (
   <Tile data-testid="star">
     <Fill data-testid="star-fill" $fill={clamp(fill, 0, 1)} />
-    <Icon color="#FFFFFF" />
+    <Icon />
   </Tile>
 );
 

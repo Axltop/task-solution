@@ -53,7 +53,7 @@ StarIcon                 shared decorative star: src/assets/star.svg as a CSS ma
 - The card is `width: min(100%, 420px)`, so it fills small screens and stops growing at the design width.
 - Padding, gaps and font sizes use `clamp()`.
 - Star tiles are flex items with `aspect-ratio: 1`, so they shrink to fit.
-- Each breakdown row is a CSS grid (`auto 1fr auto`), so only the bar changes width.
+- Each breakdown row is a CSS grid (`auto 1fr 4ch`). The star label has a fixed-width digit and the count column is a fixed 4 characters, so every row's bar starts and ends at the same place and only the bar changes width.
 
 ## Accessibility
 

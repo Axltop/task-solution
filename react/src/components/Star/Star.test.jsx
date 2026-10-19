@@ -8,6 +8,11 @@ describe('Star', () => {
     expect(screen.getByTestId('star-fill')).toHaveStyleRule('width', '100%');
   });
 
+  it('draws the star in the theme surface colour', () => {
+    renderWithTheme(<Star />);
+    expect(screen.getByTestId('star-icon')).toHaveStyleRule('color', '#FFFFFF');
+  });
+
   it('renders a partial fill', () => {
     renderWithTheme(<Star fill={0.6} />);
     expect(screen.getByTestId('star-fill')).toHaveStyleRule('width', '60%');
