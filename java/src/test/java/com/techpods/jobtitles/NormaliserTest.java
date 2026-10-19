@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -143,7 +142,9 @@ class NormaliserTest {
             titles.add("Doctor");
 
             assertEquals(List.of("Nurse"), custom.getNormalisedTitles());
-            assertThrows(UnsupportedOperationException.class, () -> new ArrayList<>(custom.getNormalisedTitles()).add("Doctor"));
+            // The mutation is the point: it proves the returned list is unmodifiable.
+            //noinspection DataFlowIssue
+            assertThrows(UnsupportedOperationException.class, () -> custom.getNormalisedTitles().add("Doctor"));
         }
     }
 
