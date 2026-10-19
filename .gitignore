@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+target/
+.DS_Store
+.idea/
+*.iml
+/task.pdf
+/.claude/
+CLAUDE.md
